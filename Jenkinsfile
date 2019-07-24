@@ -7,12 +7,12 @@ pipeline {
     }
 
 // ECR
-def awsRegion = 'us-east-1'
-def ecrAWSAccountIdProd = '187212085277'
-def ecrRepositoryName = "testdocker"
-def ecrRegistryUrl = "${ecrAWSAccountIdProd}.dkr.ecr.${awsRegion}.amazonaws.com"
-def ecrRepositoryFQN = "${ecrRegistryUrl}/${ecrRepositoryName}"
-def imageVersion = "${params.ImageVersion}"
+//def awsRegion = 'us-east-1'
+//def ecrAWSAccountIdProd = '187212085277'
+//def ecrRepositoryName = "testdocker"
+//def ecrRegistryUrl = "${ecrAWSAccountIdProd}.dkr.ecr.${awsRegion}.amazonaws.com"
+//def ecrRepositoryFQN = "${ecrRegistryUrl}/${ecrRepositoryName}"
+//def imageVersion = "${params.ImageVersion}"
 
     stages {
         stage('send email notification') {
@@ -35,6 +35,12 @@ def imageVersion = "${params.ImageVersion}"
         stage('build TestDocker docker image') {
             steps {
                 sh label: '', script: '''#!/usr/bin/env bash
+                     def awsRegion = 'us-east-1'
+                     def ecrAWSAccountIdProd = '187212085277'
+                     def ecrRepositoryName = "testdocker"
+                     def ecrRegistryUrl = "${ecrAWSAccountIdProd}.dkr.ecr.${awsRegion}.amazonaws.com"
+                     def ecrRepositoryFQN = "${ecrRegistryUrl}/${ecrRepositoryName}"
+                     def imageVersion = "${params.ImageVersion}"
                      cd $WORKSPACE
                      docker build . -t ${ecrRepositoryName}:${imageVersion}
                      docker tag ${ecrRepositoryName}:${imageVersion} ${ecrRepositoryFQN}:${imageVersion}
