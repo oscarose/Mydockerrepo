@@ -36,7 +36,7 @@ def imageVersion = "${params.ImageVersion}"
             steps {
                 sh label: '', script: '''#!/usr/bin/env bash
                      cd $WORKSPACE
-                     docker build . t ${ecrRepositoryName}:${imageVersion}
+                     docker build . -t ${ecrRepositoryName}:${imageVersion}
                      docker tag ${ecrRepositoryName}:${imageVersion} ${ecrRepositoryFQN}:${imageVersion}
                      eval $(aws ecr get-login --no-include-email --region us-east-1)
                      docker push ${ecrRepositoryFQN}:${imageVersion}
