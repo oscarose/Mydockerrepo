@@ -39,8 +39,8 @@ pipeline {
                      docker tag ${ecrRepositoryName}:${imageVersion} ${ecrRepositoryFQN}:${imageVersion}
                      eval $(aws ecr get-login --no-include-email --region us-east-1)
                      docker push ${ecrRepositoryFQN}:${imageVersion}
-                     docker rmi ${ecrRepositoryName}:${imageVersion}
-                     docker rmi ${ecrRepositoryFQN}:${imageVersion}'''
+                    // docker rmi ${ecrRepositoryName}:${imageVersion}
+                    // docker rmi ${ecrRepositoryFQN}:${imageVersion}'''
             }
         }
         stage('send success email notification') {
