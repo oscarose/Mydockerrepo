@@ -32,8 +32,8 @@ pipeline {
             }
         }
         stage('build TestDocker docker image') {
-            script {
-                 steps {
+            steps {
+                 script {
                      sh '''
                        #!/usr/bin/env bash
                         cd $WORKSPACE
