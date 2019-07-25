@@ -8,7 +8,7 @@ pipeline {
         ecrRepositoryName = "testdocker"
         ecrRegistryUrl = "${ecrAWSAccountIdProd}.dkr.ecr.${awsRegion}.amazonaws.com"
         ecrRepositoryFQN = "${ecrRegistryUrl}/${ecrRepositoryName}"
-        imageVersion = "${params.ImageVersion}"
+        def imageVersion = "${params.ImageVersion}"
     }
     parameters {
         string(name: 'ImageVerson', defaultValue: '', description: 'jenkins image version',)
