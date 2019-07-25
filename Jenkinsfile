@@ -36,7 +36,8 @@ pipeline {
             steps {
                 sh label: '', script: '''#!/usr/bin/env bash
                      cd $WORKSPACE
-                     docker build . -t ${ecrRepositoryName}:${imageVersion} --no-cache --pull
+                     docker build . -t ${ecrRepositoryName}:${params.ImageVersion} --no-cache --pull
+                     #docker build . -t ${ecrRepositoryName}:${imageVersion} --no-cache --pull
                      docker tag ${ecrRepositoryName}:${imageVersion} ${ecrRepositoryFQN}:${imageVersion}
                      eval $(aws ecr get-login --no-include-email --region us-east-1)
                      docker push ${ecrRepositoryFQN}:${imageVersion}'''
