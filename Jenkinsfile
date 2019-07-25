@@ -2,18 +2,17 @@ pipeline {
     agent {
         label'master'
     }
+    environment {
+        awsRegion = 'us-east-1'
+        ecrAWSAccountIdProd = '187212085277'
+        ecrRepositoryName = "testdocker"
+        ecrRegistryUrl = "${ecrAWSAccountIdProd}.dkr.ecr.${awsRegion}.amazonaws.com"
+        ecrRepositoryFQN = "${ecrRegistryUrl}/${ecrRepositoryName}"
+        imageVersion = "${params.ImageVersion}"
+    }
     parameters {
         string(name: 'ImageVerson', defaultValue: '', description: 'jenkins image version',)
     }
-
-// ECR
-//def awsRegion = 'us-east-1'
-//def ecrAWSAccountIdProd = '187212085277'
-//def ecrRepositoryName = "testdocker"
-//def ecrRegistryUrl = "${ecrAWSAccountIdProd}.dkr.ecr.${awsRegion}.amazonaws.com"
-//def ecrRepositoryFQN = "${ecrRegistryUrl}/${ecrRepositoryName}"
-//def imageVersion = "${params.ImageVersion}"
-
     stages {
         stage('send email notification') {
             steps {
@@ -33,22 +32,16 @@ pipeline {
             }
         }
         stage('build TestDocker docker image') {
-            def awsRegion = 'us-east-1'
-            def ecrAWSAccountIdProd = '187212085277'
-            def ecrRepositoryName = "testdocker"
-            def ecrRegistryUrl = "${ecrAWSAccountIdProd}.dkr.ecr.${awsRegion}.amazonaws.com"
-            def ecrRepositoryFQN = "${ecrRegistryUrl}/${ecrRepositoryName}"
-            def imageVersion = "${params.ImageVersion}"
-                steps {
-                    sh label: '', script: '''#!/usr/bin/env bash
-                         cd $WORKSPACE
-                         docker build . -t ${ecrRepositoryName}:${imageVersion}
-                         docker tag ${ecrRepositoryName}:${imageVersion} ${ecrRepositoryFQN}:${imageVersion}
-                         eval $(aws ecr get-login --no-include-email --region us-east-1)
-                         docker push ${ecrRepositoryFQN}:${imageVersion}
-                         docker rmi ${ecrRepositoryName}:${imageVersion}
-                         docker rmi ${ecrRepositoryFQN}:${imageVersion}'''
-               }
+            steps {
+                sh label: '', script: '''#!/usr/bin/env bash
+                     cd $WORKSPACE
+                     docker build . -t ${ecrRepositoryName}:${imageVersion}
+                     docker tag ${ecrRepositoryName}:${imageVersion} ${ecrRepositoryFQN}:${imageVersion}
+                     eval $(aws ecr get-login --no-include-email --region us-east-1)
+                     docker push ${ecrRepositoryFQN}:${imageVersion}
+                     docker rmi ${ecrRepositoryName}:${imageVersion}
+                     docker rmi ${ecrRepositoryFQN}:${imageVersion}'''
+            }
         }
         stage('send success email notification') {
             steps {
@@ -62,3 +55,4 @@ pipeline {
         }
     }
 }
+
