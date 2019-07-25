@@ -5,7 +5,8 @@ pipeline {
     environment {
         awsRegion = 'us-east-1'
         ecrAWSAccountIdProd = '187212085277'
-        ecrRepositoryName = 'testdocker' + ':' + "${imageVersion}"
+        ecrRepositoryName = "testdocker:6.0.0"
+        //ecrRepositoryName = 'testdocker' + ':' + "${imageVersion}"
         ecrRegistryUrl = "${ecrAWSAccountIdProd}.dkr.ecr.${awsRegion}.amazonaws.com"
         ecrRepositoryFQN = "${ecrRegistryUrl}/${ecrRepositoryName}" 
         def imageVersion = "${params.ImageVersion}"
