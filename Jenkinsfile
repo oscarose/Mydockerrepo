@@ -12,7 +12,8 @@ pipeline {
         imageVersion = "${ImageVersion}"
     }
     parameters {
-        string(name: 'ImageVerson', defaultValue: '', description: 'jenkins image version',)
+        string(name: 'ecrrepo_name', defaultValue: '', description: 'ecr repo name',)
+        string(name: 'image_tag', defaultValue: '', description: 'jenkins image version',)
     }
     stages {
         stage('send email notification') {
@@ -34,14 +35,9 @@ pipeline {
         }
         stage('build TestDocker docker image') {
             steps {
-                sh label: '', script: '''#!/usr/bin/env bash
-                     cd $WORKSPACE
-                     docker build . -t ${ecrRepositoryName}:${imageVersion} --no-cache --pull
-                     docker tag ${ecrRepositoryName}:${imageVersion} ${ecrRepositoryFQN}:${imageVersion}
-                     $(aws ecr get-login --no-include-email --region us-east-1)
-                     docker push ${ecrRepositoryFQN}:${imageVersion}
-                     docker rmi ${ecrRepositoryName}:${imageVersion}
-                     '''
+                sh """
+                ansible-playbook $WORKSPACE/test.yaml --extra-vars "ecrrepo_name=${ecrrepo_name} image_tag=${image_tag}" -vvv
+                """ 
             }
         }
         stage('send success email notification') {
