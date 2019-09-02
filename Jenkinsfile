@@ -9,7 +9,8 @@ pipeline {
         //ecrRepositoryName = 'testdocker' + ':' + "${imageVersion}"
         ecrRegistryUrl = "${ecrAWSAccountIdProd}.dkr.ecr.${awsRegion}.amazonaws.com"
         ecrRepositoryFQN = "${ecrRegistryUrl}/${ecrRepositoryName}" 
-        def imageVersion = "${params.ImageVersion}"
+        imageVersion = "${ImageVersion}"
+        //def imageVersion = "${params.ImageVersion}"
     }
     parameters {
         string(name: 'ImageVerson', defaultValue: '', description: 'jenkins image version',)
@@ -36,7 +37,8 @@ pipeline {
             steps {
                 sh label: '', script: '''#!/usr/bin/env bash
                      cd $WORKSPACE
-                     docker build . -t ${ecrRepositoryName}:${params.ImageVersion} --no-cache --pull
+                     docker build . -t ${ecrRepositoryName}:${imageVersion} --no-cache --pull
+                     //docker build . -t ${ecrRepositoryName}:${params.ImageVersion} --no-cache --pull
                      #docker build . -t ${ecrRepositoryName}:${imageVersion} --no-cache --pull
                      docker tag ${ecrRepositoryName}:${imageVersion} ${ecrRepositoryFQN}:${imageVersion}
                      eval $(aws ecr get-login --no-include-email --region us-east-1)
