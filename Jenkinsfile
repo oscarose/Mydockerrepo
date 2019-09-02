@@ -10,7 +10,6 @@ pipeline {
         ecrRegistryUrl = "${ecrAWSAccountIdProd}.dkr.ecr.${awsRegion}.amazonaws.com"
         ecrRepositoryFQN = "${ecrRegistryUrl}/${ecrRepositoryName}" 
         imageVersion = "${ImageVersion}"
-        //def imageVersion = "${params.ImageVersion}"
     }
     parameters {
         string(name: 'ImageVerson', defaultValue: '', description: 'jenkins image version',)
