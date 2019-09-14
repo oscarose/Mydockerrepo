@@ -6,10 +6,10 @@
       shell: docker build . -t {{ ecrrepo_name }}:{{ image_tag }}
 
     - name: Tag aws ecr repo
-      shell: docker tag {{ ecrrepo_name }}:{{ image_tag }} 187212085277.dkr.ecr.us-east-1.amazonaws.com/class-demo:{{ image_tag }}
+      shell: docker tag {{ ecrrepo_name }}:{{ image_tag }} 187212085277.dkr.ecr.us-east-1.amazonaws.com/demo-class:{{ image_tag }}
 
     - name: log into ecr
       shell: $(aws ecr get-login --no-include-email --region us-east-1)
 
     - name: push to ecr
-      shell: docker push 187212085277.dkr.ecr.us-east-1.amazonaws.com/class-demo:{{ image_tag }}
+      shell: docker push 187212085277.dkr.ecr.us-east-1.amazonaws.com/demo-class:{{ image_tag }}
